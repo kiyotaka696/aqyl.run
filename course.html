@@ -1,0 +1,238 @@
+<!doctype html>
+<html lang="kk">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Aqyl.kz — Басты бет</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="container">
+    <header id="siteHeader">
+      <div class="brand">
+                <div class="logo">
+          
+          <!-- Лампа (түнгі режим) -->
+<div style="position:fixed;bottom:24px;left:24px;z-index:1200;">
+  <button id="themeLamp" class="theme-lamp" title="Түнгі/Күндізгі режим">
+    <img id="lampIcon" src="img/logo.png" alt="Theme" />
+  </button>
+</div>
+<script>
+(function(){
+  const body = document.body;
+  const lamp = document.getElementById('themeLamp');
+  const lampIcon = document.getElementById('lampIcon');
+  const footerLogo = document.getElementById('footerLogo');
+  const saved = localStorage.getItem('aqyl_theme');
+
+  // Функция для обновления логотипов
+  function updateLogos(isDark) {
+    lampIcon.src = isDark ? 'img/logo.png' : 'img/darklogo.png';
+    footerLogo.src = isDark ? 'img/logo.png' : 'img/darklogo.png';
+  }
+
+  // Настройка при загрузке
+  const isDarkStart = (saved === 'dark');
+  if (isDarkStart) body.classList.add('dark');
+  updateLogos(isDarkStart);
+
+  // Переключатель темы
+  lamp.addEventListener('click', () => {
+    body.classList.toggle('dark');
+    const isDark = body.classList.contains('dark');
+    localStorage.setItem('aqyl_theme', isDark ? 'dark' : 'light');
+    updateLogos(isDark);
+  });
+})();
+</script>
+
+  <script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const openModal = document.getElementById('open-modal');
+    const closeModal = document.getElementById('close-modal');
+    const modalBg = document.getElementById('modal-bg');
+
+    openModal.addEventListener('click', (e) => {
+      e.preventDefault();
+      modalBg.classList.add('show');
+      modalBg.setAttribute('aria-hidden', 'false');
+    });
+
+    closeModal.addEventListener('click', () => {
+      modalBg.classList.remove('show');
+      modalBg.setAttribute('aria-hidden', 'true');
+    });
+
+    modalBg.addEventListener('click', (e) => {
+      if (e.target === modalBg) {
+        modalBg.classList.remove('show');
+        modalBg.setAttribute('aria-hidden', 'true');
+      }
+    });
+  });
+  </script>
+        </div>
+        <h1>Aqyl.kz</h1>
+      </div>
+      <nav>
+        <a style="color: red;" href="#">Басты</a>
+        <a  href="catalog.html">Курстар</a>
+        <a href="link.html">Байланыс</a>
+        <a class="pill" href="#" id="open-modal">Тіркелу</a>
+      </nav>
+    </header>
+
+    <main>
+      <div class="hero" role="banner">
+        <div class="left">
+          <div class="lang-badge">Қазақша</div>
+          <h2>Білімді Бол!</h2>
+          <p>Қазақ тіліндегі заманауи онлайн курстар арқылы жаңа білімдерді игеріңіз. Сіздің болашағыңыз — біздің курстарда!</p>
+          <a class="start-btn" href="#courses">Бастау</a>
+        </div>
+        <div class="right" aria-hidden="true">
+          <div class="bg"></div>
+          <!-- GIF: мөлдір фонға сай, түнгі режимге адаптив -->
+          <img src="https://i.gifer.com/fyFn.gif" alt="learning animation" class="hero-gif">
+        </div>
+      </div>
+
+      <!-- тима -->
+      <section class="team" id="team">
+        <h3>Біздің Жұлдыздарымыз</h3>
+        <div class="cards">
+
+          <article class="card">
+            <div style="display:flex;gap:16px;align-items:center">
+              <div class="avatar"><img src="https://i.pinimg.com/736x/4f/df/dd/4fdfdd5aecaf9f82ad595442f6974603.jpg" alt="aidar"></div>
+              <div>
+                <div class="role-badge">Ұстаз</div>
+                <div class="name">Темірлан k1yotaka</div>
+                <div class="position">Бас оқытушы</div>
+              </div>
+            </div>
+          </article>
+
+          <article class="card">
+            <div style="display:flex;gap:16px;align-items:center">
+              <div class="avatar"><img src="https://avatars.mds.yandex.net/i?id=54b8703bc2d81d8f07a00c842e485f74_l-5234556-images-thumbs&n=13" alt="gulmira"></div>
+              <div>
+                <div class="role-badge">Маман</div>
+                <div class="name">Елдос Қыдырбек</div>
+                <div class="position">Әдіскер</div>
+              </div>
+            </div>
+          </article>
+
+          <article class="card">
+            <div style="display:flex;gap:16px;align-items:center">
+              <div class="avatar"><img src="https://cdn.discordapp.com/avatars/454280843943215104/c4030f24cf525c863e1ede5de20cae5c.webp?size=32" alt="nurlan"></div>
+              <div>
+                <div class="role-badge">Жобагер</div>
+                <div class="name">Nuras</div>
+                <div class="position">Тех. қолдау</div>
+              </div>
+            </div>
+          </article>
+
+        </div>
+      </section>
+
+      <!-- курс -->
+      <section id="courses">
+        <h3>Біздің Курстар</h3>
+        <div class="course-grid">
+          <div class="course">
+            <img src="https://images.unsplash.com/photo-1553484771-371a605b060b?q=80&w=800" alt="">
+            <h4>Python негіздері</h4>
+            <p>Бағдарламалауды нөлден үйреніңіз.</p>
+            <a href="catalog.html" target="_blank">Толығырақ</a>
+          </div>
+          <div class="course">
+            <img src="https://images.unsplash.com/photo-1519389950473-47ba0277781c?q=80&w=800" alt="">
+            <h4>Web-әзірлеу</h4>
+            <p>HTML, CSS және JavaScript тілдерін меңгеріңіз.</p>
+            <a href="catalog.html" target="_blank">Толығырақ</a>
+          </div>
+          <div class="course">
+            <img src="https://images.unsplash.com/photo-1555949963-aa79dcee981c?q=80&w=800" alt="">
+            <h4>Киберқауіпсіздік</h4>
+            <p>Қауіпсіздік әлемін зерттеңіз.</p>
+            <a href="catalog.html" target="_blank">Толығырақ</a>
+          </div>
+        </div>
+      </section>
+
+
+  <!-- рег -->
+  <div class="modal-bg" id="modal-bg">
+    <div class="modal">
+      <h3>Тіркелу</h3>
+      <input type="text" placeholder="Атыңыз">
+      <input type="email" placeholder="Email">
+      <input type="password" placeholder="Құпиясөз">
+      <button onclick="window.open('','_blank')">Тіркелу</button>
+      <button class="close-btn" id="close-modal">Жабу</button>
+    </div>
+  </div>
+
+
+
+  <!--Футер-->
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<link rel="preconnect" href="https://fonts.gstatic.com">
+<link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Play&display=swap" rel="stylesheet"> 
+<footer class="">
+<div class="footer">
+<div class="row">
+<a href="#"><img class="footerLogo" id="footerLogo" src="img/logo.png" alt="Footer Logo" />
+  <p style="padding: center; font-size: 30px;">Aqyl.kz</p></a>
+</div>
+
+<div class="row">
+<ul>
+<li><p style="color: red;" >Басты</p></li>
+<li><a href="catalog.html">Курстар</a></li>
+<li><a href="link.html">Байланыс</a></li>
+</ul>
+</div>
+
+<div class="row">
+Aqyl.Kz Copyright © 2025  - All rights reserved by :  NET.runners
+</div>
+</div>
+</footer>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  const body = document.body;
+  const lamp = document.getElementById('themeLamp');
+  const lampIcon = document.getElementById('lampIcon');
+  const footerLogo = document.getElementById('footerLogo');
+  const saved = localStorage.getItem('aqyl_theme');
+
+  // Функция обновления логотипов
+  function updateLogos(isDark) {
+    lampIcon.src = isDark ? 'img/logo.png' : 'img/darklogo.png';
+    footerLogo.src = isDark ? 'img/logo.png' : 'img/darklogo.png';
+  }
+
+  // Проверяем сохранённую тему
+  const isDarkStart = (saved === 'dark');
+  if (isDarkStart) body.classList.add('dark');
+  updateLogos(isDarkStart);
+
+  // Переключатель темы
+  lamp.addEventListener('click', () => {
+    body.classList.toggle('dark');
+    const isDark = body.classList.contains('dark');
+    localStorage.setItem('aqyl_theme', isDark ? 'dark' : 'light');
+    updateLogos(isDark);
+  });
+});
+</script>
+</body>
+</html>
