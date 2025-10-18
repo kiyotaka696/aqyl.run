@@ -213,12 +213,32 @@
         </div>
         <h1>Aqyl.run</h1>
       </div>
-      <nav>
-        <a style="color: red;" href="#">Басты</a>
-        <a  href="catalog.html">Курстар</a>
-        <a href="link.html">Байланыс</a>
-        <a class="pill" href="#" id="open-modal">Тіркелу</a>
-      </nav>
+<nav>
+  <a style="color: red;" href="#">Басты</a>
+  <a href="catalog.html">Курстар</a>
+  <a href="link.html">Байланыс</a>
+  <a class="pill" href="#" id="open-modal">Тіркелу</a>
+
+  <!-- Patch bell -->
+  <div class="patch-bell" id="patchBell" aria-haspopup="true" aria-expanded="false">
+    <button id="bellBtn" class="patch-bell-btn" aria-label="Patch notes">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden>
+        <path d="M15 17H9a3 3 0 0 1-3-3V10a6 6 0 1 1 12 0v4a3 3 0 0 1-3 3z" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M13.73 21a2 2 0 0 1-3.46 0" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+      <span class="patch-badge" id="patchBadge" aria-hidden="true"></span>
+    </button>
+
+    <div class="patch-popup" id="patchPopup" role="dialog" aria-labelledby="patchTitle" aria-hidden="true">
+      <div class="patch-popup-inner">
+        <div class="patch-title" id="patchTitle">📢 Aqyl.run Patch — тарихи нұсқалар</div>
+        <ul class="patch-list" id="patchList">
+          <!-- JS заполнит список версий -->
+        </ul>
+      </div>
+    </div>
+  </div>
+</nav>
     </header>
 
     <main>
@@ -397,6 +417,78 @@ document.addEventListener('DOMContentLoaded', function() {
   else{window.addEventListener("load",onLoad)}
 })();
 </script>
+
+      <script>
+(function() {
+  const patchBell = document.getElementById('patchBell');
+  const bellBtn = document.getElementById('bellBtn');
+  const patchPopup = document.getElementById('patchPopup');
+  const patchBadge = document.getElementById('patchBadge');
+  const patchListEl = document.getElementById('patchList');
+
+  // === Список старых версий сайта ===
+  const patchVersions = [
+    { date: '2025-9-25', name: 'v1 — Ең алғашқы қосылыс', url: 'https://kiyotaka696.github.io/aqyl.run/course_v1.html' },
+    { date: '2025-10-4', name: 'v2 — Шәмәлі болсын сырланған бөлігі', url: 'https://kiyotaka696.github.io/aqyl.run/course_v2.html' },
+    { date: '2025-10-9', name: 'v2 — Жаңартылған каталог', url: 'https://kiyotaka696.github.io/aqyl.run/course_v3.html' },
+    { date: '2025-10-19', name: 'Және де дәл қәзіргі сайтымыздың нұсқасы - NEW ERA', url: 'https://kiyotaka696.github.io/aqyl.run/course.html' },
+
+    // добавляй свои версии сюда
+  ];
+
+  patchVersions.forEach(patch => {
+    const li = document.createElement('li');
+    const a = document.createElement('a');
+    a.href = patch.url;
+    a.textContent = `${patch.date} — ${patch.name}`;
+    li.appendChild(a);
+    patchListEl.appendChild(li);
+  });
+
+  // === Функции открытия/закрытия ===
+  function openPopup() {
+    patchPopup.classList.add('show');
+    patchPopup.setAttribute('aria-hidden', 'false');
+    patchBell.setAttribute('aria-expanded', 'true');
+
+    // скрываем бейдж при первом открытии
+    if (patchBadge) {
+      patchBadge.style.opacity = '0';
+      patchBadge.style.transform = 'scale(.6)';
+      setTimeout(() => { if(patchBadge.parentNode) patchBadge.parentNode.removeChild(patchBadge); }, 220);
+    }
+  }
+
+  function closePopup() {
+    patchPopup.classList.remove('show');
+    patchPopup.setAttribute('aria-hidden', 'true');
+    patchBell.setAttribute('aria-expanded', 'false');
+  }
+
+  // === События ===
+  bellBtn.addEventListener('click', (e) => {
+    e.stopPropagation();
+    if (patchPopup.classList.contains('show')) closePopup();
+    else openPopup();
+  });
+
+  document.addEventListener('click', (e) => {
+    if (!patchBell.contains(e.target)) closePopup();
+  });
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') closePopup();
+  });
+
+  bellBtn.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault();
+      bellBtn.click();
+    }
+  });
+})();
+</script>
 </body>
 </html>
+
 
