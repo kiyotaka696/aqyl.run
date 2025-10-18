@@ -1,0 +1,354 @@
+<!doctype html>
+<html lang="kk">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Aqyl.kz — Басты бет</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style_v1.css">
+  <style>
+    :root {
+      --bg:#eef3f4;
+      --card:#ffffff;
+      --accent:#d8f0fb;
+      --accent-strong:#bfeaf7;
+      --muted:#9aa7a9;
+      --shadow:0 8px 24px rgba(15,23,42,0.06);
+    }
+    body.dark {
+      --bg:#0e141b;
+      --card:#1b232e;
+      --accent:#243447;
+      --accent-strong:#375a7f;
+      --muted:#b0bcc5;
+      color:#e6eef3;
+    }
+    *{box-sizing:border-box}
+    body{margin:0;font-family:Inter,system-ui,sans-serif;background:var(--bg);transition:.3s}
+    .container{max-width:1160px;margin:36px auto;padding:0 28px}
+    header{display:flex;align-items:center;justify-content:space-between;padding:18px 24px;background:linear-gradient(180deg,var(--accent) 0%,rgba(255,255,255,0.5) 100%);border-radius:18px;box-shadow:var(--shadow)}
+    .brand{display:flex;align-items:center;gap:14px}
+    .logo{width:64px;height:48px;border-radius:10px;overflow:hidden}
+    .logo img{width:100%;height:100%;object-fit:cover}
+    nav{display:flex;gap:22px}
+    nav a{text-decoration:none;font-weight:500;color:#07202a}
+    .pill{background:rgba(255,255,255,0.6);padding:10px 20px;border-radius:12px;font-weight:600}
+    .hero{display:grid;grid-template-columns:1fr 420px;gap:40px;align-items:center;margin-top:30px;padding:40px;border-radius:18px;background:linear-gradient(90deg,rgba(216,240,251,0.9) 0%,rgba(255,255,255,0.4) 100%)}
+    .lang-badge{background:#fff;padding:10px 14px;border-radius:30px;display:inline-block;margin-bottom:14px;font-weight:600}
+    .hero h2{font-size:72px;margin:8px 0}
+    .hero p{font-size:20px;opacity:0.9}
+    .start-btn{background:var(--accent-strong);padding:18px 36px;border-radius:16px;text-decoration:none;font-weight:600;display:inline-block;margin-top:28px;color:#000;transition:.3s}
+    .start-btn:hover{transform:scale(1.05)}
+    .hero .right{height:340px;border-radius:18px;background:url('')center/cover}
+
+    /* тиммейты */
+    .team{margin:64px 0}
+    .team h3{font-size:48px;margin:10px 0 28px}
+    .cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:26px}
+    .card{background:var(--card);padding:28px;border-radius:16px;box-shadow:var(--shadow);display:flex;flex-direction:column;gap:14px;transition:0.3s}
+    .card:hover{transform:translateY(-5px)}
+    .avatar{width:72px;height:72px;border-radius:999px;overflow:hidden}
+    .avatar img{width:100%;height:100%;object-fit:cover}
+    .role-badge{display:inline-block;padding:8px 12px;border-radius:18px;background:var(--accent);font-weight:600}
+    .name{font-weight:800}
+    .position{color:var(--muted)}
+
+    /* курс */
+    #courses{margin:70px 0}
+    #courses h3{font-size:48px;margin-bottom:28px}
+    .course-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:26px}
+    .course{background:var(--card);border-radius:16px;padding:24px;box-shadow:var(--shadow);transition:0.3s}
+    .course:hover{transform:translateY(-5px)}
+    .course img{width:100%;height:160px;border-radius:12px;object-fit:cover;margin-bottom:16px}
+    .course h4{margin:0 0 8px}
+    .course p{color:var(--muted);margin-bottom:14px}
+    .course a{padding:10px 18px;border-radius:12px;background:var(--accent-strong);text-decoration:none;font-weight:600;display:inline-block}
+
+    /* связь */
+    #contact{background:var(--card);padding:40px;border-radius:18px;box-shadow:var(--shadow);margin-bottom:80px}
+    #contact h3{font-size:36px;margin-bottom:24px}
+    form{display:flex;flex-direction:column;gap:16px}
+    input,textarea{padding:14px;border:none;border-radius:10px;background:var(--accent);font-size:16px}
+    button{padding:14px 22px;border:none;border-radius:12px;background:var(--accent-strong);font-weight:600;cursor:pointer}
+    button:hover{transform:scale(1.05)}
+
+    /* дарк мод */
+    .dark-toggle{position:fixed;bottom:24px;right:24px;background:var(--accent-strong);border:none;padding:12px 16px;border-radius:50%;cursor:pointer;font-weight:700;box-shadow:var(--shadow)}
+
+    
+    .modal-bg{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.5);align-items:center;justify-content:center}
+    .modal{background:var(--card);padding:32px;border-radius:18px;box-shadow:var(--shadow);width:320px;text-align:center}
+    .modal input{width:100%;margin:8px 0}
+    .close-btn{background:#ccc;margin-top:12px}
+    .show{display:flex!important}
+    footer{text-align:center;padding:28px 0;color:var(--muted)}
+  </style>
+</head>
+<body>
+<!-- найт вижн -->
+<script>
+  const toggle = document.createElement('button');
+  toggle.innerHTML = '🌙';
+  toggle.id = 'themeToggle';
+  toggle.style.position = 'fixed';
+  toggle.style.bottom = '20px';
+  toggle.style.right = '20px';
+  toggle.style.background = 'var(--accent-strong)';
+  toggle.style.border = 'none';
+  toggle.style.padding = '12px 14px';
+  toggle.style.borderRadius = '50%';
+  toggle.style.fontSize = '20px';
+  toggle.style.cursor = 'pointer';
+  toggle.style.boxShadow = '0 4px 12px rgba(0,0,0,0.2)';
+  document.body.appendChild(toggle);
+
+  function setTheme(isDark) {
+    document.body.classList.toggle('dark', isDark);
+    toggle.innerHTML = isDark ? '☀️' : '🌙';
+    localStorage.setItem('theme', isDark ? 'dark' : 'light');
+  }
+
+  // темный принц
+  setTheme(localStorage.getItem('theme') === 'dark');
+
+  toggle.addEventListener('click', () => {
+    const isDark = !document.body.classList.contains('dark');
+    setTheme(isDark);
+  });
+</script>
+
+<style>
+  body.dark {
+    background: #0d1117;
+    color: #f5f7fa;
+  }
+
+  body.dark header, 
+  body.dark .card, 
+  body.dark .features, 
+  body.dark .feat-box {
+    background: #1b2431 !important;
+    color: #f8fafc !important;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.3);
+  }
+
+  body.dark .hero {
+    background: linear-gradient(90deg, rgba(31,41,55,0.95) 0%, rgba(51,65,85,0.9) 100%) !important;
+  }
+
+  body.dark a {
+    color: #7dd3fc !important;
+  }
+
+  body.dark h1, 
+  body.dark h2, 
+  body.dark h3, 
+  body.dark h4 {
+    color: #e0f2fe !important;
+    text-shadow: 0 0 6px rgba(125, 211, 252, 0.4);
+  }
+
+  body.dark .role-badge, 
+  body.dark .pill, 
+  body.dark .lang-badge {
+    background: #334155 !important;
+    color: #e2e8f0 !important;
+  }
+
+  body.dark .start-btn {
+    background: #38bdf8 !important;
+    color: #0f172a !important;
+    box-shadow: 0 4px 18px rgba(56,189,248,0.4);
+  }
+
+  body.dark footer {
+    color: #94a3b8 !important;
+  }
+
+  #themeToggle:hover {
+    transform: scale(1.1);
+    transition: 0.2s;
+  }
+</style>
+
+
+<style>
+  body.dark {
+    background: #0e1116;
+    color: #f1f5f9;
+  }
+  body.dark header, 
+  body.dark .card, 
+  body.dark .features, 
+  body.dark .feat-box {
+    background: #1e293b !important;
+    color: #f1f5f9 !important;
+  }
+  body.dark .hero {
+    background: linear-gradient(90deg, rgba(30,41,59,0.9) 0%, rgba(51,65,85,0.8) 100%) !important;
+  }
+  body.dark a {
+    color: #93c5fd !important;
+  }
+</style>
+
+  <div class="container">
+    <header>
+      <div class="brand">
+        <div class="logo"><img src="https://images.unsplash.com/photo-1529333166437-7750a6dd5a70?q=80&w=600" alt="logo"></div>
+        <h1>Aqyl.kz</h1>
+      </div>
+      <nav>
+        <a href="#">Басты</a>
+        <a href="#courses">Курстар</a>
+        <a href="#contact">Байланыс</a>
+        <a class="pill" href="#" id="open-modal">Тіркелу</a>
+      </nav>
+    </header>
+
+    <main>
+        
+<div class="hero">
+  <div class="left">
+    <div class="lang-badge">Қазақша</div>
+    <h2>Білімді Бол!</h2>
+    <p>Қазақ тіліндегі заманауи онлайн курстар арқылы жаңа білімдерді игеріңіз.</p>
+    <a class="start-btn" href="#courses">Бастау</a>
+  </div>
+  <div class="right">
+    <div class="bg" aria-hidden="true"></div>
+    <img src="https://media.discordapp.net/attachments/1404966171434025072/1424089385393193122/2025-10-04_223834.png?ex=68e2ae17&is=68e15c97&hm=e0d622e925d6a9ab66ff7e0e2e8244e16ce70a8b30d1c0cbf91b901b54823b86&=&format=webp&quality=lossless" alt="learning animation" class="hero-gif">
+  </div>
+</div>
+
+<style>
+.hero .right {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.hero-gif {
+  position: relative;
+  width: 280px;
+  height: auto;
+  z-index: 2;
+  pointer-events: none;
+  opacity: 0.9;
+}
+</style>
+
+
+      <!-- тима -->
+      <section class="team" id="team">
+        <h3>Біздің Жұлдыздарымыз</h3>
+        <div class="cards">
+
+          <article class="card">
+            <div style="display:flex;gap:16px;align-items:center">
+              <div class="avatar"><img src="https://i.pinimg.com/736x/4f/df/dd/4fdfdd5aecaf9f82ad595442f6974603.jpg" alt="aidar"></div>
+              <div>
+                <div class="role-badge">Ұстаз</div>
+                <div class="name">Темірлан k1yotaka</div>
+                <div class="position">Бас оқытушы</div>
+              </div>
+            </div>
+          </article>
+
+          <article class="card">
+            <div style="display:flex;gap:16px;align-items:center">
+              <div class="avatar"><img src="https://avatars.mds.yandex.net/i?id=54b8703bc2d81d8f07a00c842e485f74_l-5234556-images-thumbs&n=13" alt="gulmira"></div>
+              <div>
+                <div class="role-badge">Маман</div>
+                <div class="name">Елдос Гей</div>
+                <div class="position">Әдіскер</div>
+              </div>
+            </div>
+          </article>
+
+          <article class="card">
+            <div style="display:flex;gap:16px;align-items:center">
+              <div class="avatar"><img src="https://cdn.discordapp.com/avatars/454280843943215104/c4030f24cf525c863e1ede5de20cae5c.webp?size=32" alt="nurlan"></div>
+              <div>
+                <div class="role-badge">Жобагер</div>
+                <div class="name">Nuras 11lvl</div>
+                <div class="position">Тех. қолдау</div>
+              </div>
+            </div>
+          </article>
+
+          <article class="card">
+            <div style="display:flex;gap:16px;align-items:center">
+              <div class="avatar"><img src="https://avatars.mds.yandex.net/i?id=561379bc38b0d7e243f2167dc0e9eb350b9dd22c-8229244-images-thumbs&n=13" alt="aizhan"></div>
+              <div>
+                <div class="role-badge">CEO</div>
+                <div class="name">Mr-Senior.GPT</div>
+                <div class="position">Бастық</div>
+              </div>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <!-- курс -->
+      <section id="courses">
+        <h3>Біздің Курстар</h3>
+        <div class="course-grid">
+          <div class="course">
+            <img src="https://images.unsplash.com/photo-1553484771-371a605b060b?q=80&w=800" alt="">
+            <h4>Python негіздері</h4>
+            <p>Бағдарламалауды нөлден үйреніңіз.</p>
+            <a href="https://aqyl-courses.kz" target="_blank">Толығырақ</a>
+          </div>
+          <div class="course">
+            <img src="https://images.unsplash.com/photo-1519389950473-47ba0277781c?q=80&w=800" alt="">
+            <h4>Web-әзірлеу</h4>
+            <p>HTML, CSS және JavaScript тілдерін меңгеріңіз.</p>
+            <a href="https://aqyl-courses.kz" target="_blank">Толығырақ</a>
+          </div>
+          <div class="course">
+            <img src="https://images.unsplash.com/photo-1555949963-aa79dcee981c?q=80&w=800" alt="">
+            <h4>Киберқауіпсіздік</h4>
+            <p>Қауіпсіздік әлемін зерттеңіз.</p>
+            <a href="https://aqyl-courses.kz" target="_blank">Толығырақ</a>
+          </div>
+        </div>
+      </section>
+
+      <!-- контакт -->
+      <section id="contact">
+        <h3>Байланыс</h3>
+        <form onsubmit="event.preventDefault();alert('Хабарыңыз жіберілді!');">
+          <input type="text" placeholder="Атыңыз" required>
+          <input type="email" placeholder="Email" required>
+          <textarea rows="5" placeholder="Хабарламаңыз..." required></textarea>
+          <button type="submit">Жіберу</button>
+        </form>
+      </section>
+    </main>
+  </div>
+
+  <!-- рег -->
+  <div class="modal-bg" id="modal-bg">
+    <div class="modal">
+      <h3>Тіркелу</h3>
+      <input type="text" placeholder="Атыңыз">
+      <input type="email" placeholder="Email">
+      <input type="password" placeholder="Құпиясөз">
+      <button onclick="window.open('','_blank')">Тіркелу</button>
+      <button class="close-btn" id="close-modal">Жабу</button>
+    </div>
+  </div>
+
+  <button class="dark-toggle" id="dark-toggle">🌙</button>
+
+  <footer>© 2025 Bilim — Барлық құқықтар қорғалған - NET.runners</footer>
+
+  <script>
+    document.getElementById('dark-toggle').onclick=()=>document.body.classList.toggle('dark');
+    const modalBg=document.getElementById('modal-bg');
+    document.getElementById('open-modal').onclick=()=>modalBg.classList.add('show');
+    document.getElementById('close-modal').onclick=()=>modalBg.classList.remove('show');
+  </script>
+</body>
+</html>
