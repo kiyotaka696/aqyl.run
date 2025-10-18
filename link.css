@@ -509,3 +509,90 @@ body.dark footer {
   height: auto;    
   transition: all 0.3s ease;
 }
+
+
+/* === Patch bell & popup === */
+.patch-bell {
+  display: inline-block;
+  position: relative;
+  margin-left: 12px;
+  vertical-align: middle;
+}
+
+.patch-bell-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  border-radius: 8px;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  color: var(--text);
+  position: relative;
+  padding: 0;
+}
+
+body.dark .patch-bell-btn { color: var(--text); }
+body:not(.dark) .patch-bell-btn { color: var(--text); }
+
+.patch-badge {
+  position: absolute;
+  top: 5px;
+  right: 6px;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #ef4444;
+  box-shadow: 0 0 0 3px rgba(239,68,68,0.12);
+  display: inline-block;
+  transition: opacity .18s ease, transform .18s ease;
+}
+
+.patch-popup {
+  position: absolute;
+  right: 0;
+  top: calc(100% + 10px);
+  width: 260px;
+  max-width: calc(100vw - 32px);
+  border-radius: 12px;
+  box-shadow: 0 10px 30px rgba(2,6,23,0.12);
+  overflow: hidden;
+  transform-origin: top right;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(-6px) scale(.98);
+  transition: opacity .18s ease, transform .18s ease, visibility .18s;
+  z-index: 2000;
+}
+
+.patch-popup.show {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0) scale(1);
+}
+
+.patch-popup-inner { padding: 12px 14px; }
+
+.patch-title { font-weight: 700; margin-bottom: 8px; font-size: 14px; }
+
+.patch-list { margin: 0; padding-left: 18px; color: var(--muted); font-size: 13px; }
+.patch-list li { margin-bottom: 6px; }
+.patch-list li a { color: var(--text); text-decoration: underline; }
+
+body:not(.dark) .patch-popup {
+  background: rgba(255,255,255,0.98);
+  color: var(--text);
+  border: 1px solid rgba(7,27,36,0.04);
+}
+body.dark .patch-popup {
+  background: rgba(12,16,20,0.96);
+  color: var(--text);
+  border: 1px solid rgba(255,255,255,0.03);
+}
+
+@media (max-width: 520px) {
+  .patch-popup { right: -6px; left: 8px; top: calc(100% + 8px); width: calc(100vw - 32px); }
+  .patch-bell { margin-left: 8px; }
+}
