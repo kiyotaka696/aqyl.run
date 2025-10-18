@@ -16,6 +16,127 @@
 
   gtag('config', 'G-Q6EH2PJ601');
 </script>
+<!-- Chatbase style overrides -->
+<style id="chatbase-overrides">
+  /* Увеличиваем кнопку-launcher */
+  #chatbase-bubble-button {
+    width: 60px !important;
+    height: 60px !important;
+    min-width: 60px !important;
+    min-height: 60px !important;
+    border-radius: 50% !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    box-shadow: 0 8px 24px rgb(0, 174, 255) !important;
+    background: #d8f0fb !important; /* цвет кнопки — тот же, что хедер */
+    border: none !important;
+    z-index: 2147483647 !important;
+    transform: translateZ(0);
+  }
+
+  /* Подгоняем иконку внутри кнопки */
+/* уменьшаем стрелку в header Chatbase */
+#chatbase-bubble-window .chatbase-header svg,
+#chatbase-bubble-window .chatbase-header img {
+    width: 14px !important;
+    height: 14px !important;
+}
+
+
+  /* Контейнер окна чата (внешняя обёртка) */
+  #chatbase-bubble-window {
+    background: #262727 !important; /* фон окна */
+    color: #ffffff !important;
+    border-radius: 30px !important;
+    overflow: hidden !important;
+    box-shadow: 0 20px 60px rgba(0, 174, 255, 0.45) !important;
+    z-index: 2147483646 !important;
+  }
+
+  /* Если существует заголовок/хедер в внешнем DOM */
+  #chatbase-bubble-window .chatbase-header,
+  #chatbase-bubble-window .header,
+  #chatbase-bubble-window .chat-header,
+  #chatbase-bubble-window .bubble-header {
+    background: #000000 !important; /* хедер */
+    color: #ffffff !important;
+    border-bottom: 1px solid rgba(255,255,255,0.04) !important;
+  }
+
+  /* Мобильная компенсация — чтобы кнопка не занимала слишком много экрана */
+  @media (max-width: 480px) {
+    #chatbase-bubble-button {
+      width: 64px !important;
+      height: 64px !important;
+    }
+    #chatbase-bubble-button img,
+    #chatbase-bubble-button svg {
+      width: 36px !important;
+      height: 36px !important;
+    }
+  }
+</style>
+
+<!-- Попытка инжектнуть стили внутрь iframe, если iframe доступен same-origin.
+     Если iframe cross-origin — постмессед либо инъекция не сработают,
+     но внешние элементы всё равно будут оформлены. -->
+<script>
+(function(){
+  const cssText = document.getElementById('chatbase-overrides').innerText;
+  function injectToIframe(iframe){
+    if(!iframe) return false;
+    try{
+      const doc = iframe.contentDocument || iframe.contentWindow.document;
+      if(!doc) return false;
+      const s = doc.createElement('style');
+      s.setAttribute('data-from','page-chatbase-override');
+      s.innerHTML = cssText;
+      doc.head && doc.head.appendChild(s);
+      console.log('[chatbase override] injected into iframe (same-origin).');
+      return true;
+    }catch(err){
+      console.warn('[chatbase override] cannot access iframe document (probably cross-origin).', err);
+      // Fallback: try postMessage — embed might listen for such messages (depends on Chatbase impl).
+      try{
+        iframe.contentWindow.postMessage({ type: 'CHATBASE:INJECT_CSS', css: cssText }, '*');
+        console.log('[chatbase override] posted message to iframe (fallback).');
+      }catch(e){ /* ignore */ }
+      return false;
+    }
+  }
+
+  function findIframeAndInject(){
+    // iframe может находиться внутри #chatbase-bubble-window или вложен по-другому
+    const container = document.getElementById('chatbase-bubble-window');
+    if(container){
+      const ifr = container.querySelector('iframe');
+      if(ifr) return injectToIframe(ifr);
+    }
+    // еще пробуем найти любой iframe, который был добавлен скриптом Chatbase
+    const anyIframe = document.querySelector('iframe[src*="chatbase"]') || document.querySelector('iframe');
+    if(anyIframe) return injectToIframe(anyIframe);
+    return false;
+  }
+
+  // Попытки: при загрузке страницы и через сообщения "iframeReady"
+  window.addEventListener('message', (ev) => {
+    // если embed шлёт сообщение о готовности, попробуем инжект
+    try{
+      const data = ev.data;
+      if(typeof data === 'object' && (data === 'iframeReady' || data?.type === 'iframeReady' || data?.type === 'IFRAME_READY')){
+        setTimeout(findIframeAndInject, 300);
+      }
+      // В некоторых реализациях embed принимает {type:'INJECT_CSS'} — мы уже посылаем такое сообщение в catch
+    }catch(e){}
+  });
+
+  // Также запускаем через таймауты — на случай если iframe создаётся позже
+  setTimeout(findIframeAndInject, 1000);
+  setTimeout(findIframeAndInject, 3000);
+  setTimeout(findIframeAndInject, 7000);
+})();
+</script>
 </head>
 <body>
   <div class="container">
@@ -208,7 +329,6 @@ document.addEventListener('DOMContentLoaded', function() {
 </script>
 </body>
 </html>
-
 
 
 
