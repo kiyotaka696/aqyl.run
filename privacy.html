@@ -1,0 +1,355 @@
+<!doctype html>
+<html lang="kk">
+<head>
+  <meta charset="utf-8" />
+  <meta name="google-site-verification" content="NsGJ_8y8G51BN-45DSlU2rZ_WKpM0YNhT5-nXjbQ-0U" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Aqyl.run — Байланыс</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="link.css">
+  <!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-Q6EH2PJ601"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-Q6EH2PJ601');
+</script>
+<!-- Chatbase style overrides -->
+<style id="chatbase-overrides">
+  /* Увеличиваем кнопку-launcher */
+  #chatbase-bubble-button {
+    width: 60px !important;
+    height: 60px !important;
+    min-width: 60px !important;
+    min-height: 60px !important;
+    border-radius: 50% !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    box-shadow: 0 8px 24px rgb(0, 174, 255) !important;
+    background: #d8f0fb !important; /* цвет кнопки — тот же, что хедер */
+    border: none !important;
+    z-index: 2147483647 !important;
+    transform: translateZ(0);
+  }
+
+  /* Подгоняем иконку внутри кнопки */
+/* уменьшаем стрелку в header Chatbase */
+#chatbase-bubble-window .chatbase-header svg,
+#chatbase-bubble-window .chatbase-header img {
+    width: 14px !important;
+    height: 14px !important;
+}
+
+
+  /* Контейнер окна чата (внешняя обёртка) */
+  #chatbase-bubble-window {
+    background: #262727 !important; /* фон окна */
+    color: #ffffff !important;
+    border-radius: 30px !important;
+    overflow: hidden !important;
+    box-shadow: 0 20px 60px rgba(0, 174, 255, 0.45) !important;
+    z-index: 2147483646 !important;
+  }
+
+  /* Если существует заголовок/хедер в внешнем DOM */
+  #chatbase-bubble-window .chatbase-header,
+  #chatbase-bubble-window .header,
+  #chatbase-bubble-window .chat-header,
+  #chatbase-bubble-window .bubble-header {
+    background: #000000 !important; /* хедер */
+    color: #ffffff !important;
+    border-bottom: 1px solid rgba(255,255,255,0.04) !important;
+  }
+
+  /* Мобильная компенсация — чтобы кнопка не занимала слишком много экрана */
+  @media (max-width: 480px) {
+    #chatbase-bubble-button {
+      width: 64px !important;
+      height: 64px !important;
+    }
+    #chatbase-bubble-button img,
+    #chatbase-bubble-button svg {
+      width: 36px !important;
+      height: 36px !important;
+    }
+  }
+</style>
+
+<!-- Попытка инжектнуть стили внутрь iframe, если iframe доступен same-origin.
+     Если iframe cross-origin — постмессед либо инъекция не сработают,
+     но внешние элементы всё равно будут оформлены. -->
+<script>
+(function(){
+  const cssText = document.getElementById('chatbase-overrides').innerText;
+  function injectToIframe(iframe){
+    if(!iframe) return false;
+    try{
+      const doc = iframe.contentDocument || iframe.contentWindow.document;
+      if(!doc) return false;
+      const s = doc.createElement('style');
+      s.setAttribute('data-from','page-chatbase-override');
+      s.innerHTML = cssText;
+      doc.head && doc.head.appendChild(s);
+      console.log('[chatbase override] injected into iframe (same-origin).');
+      return true;
+    }catch(err){
+      console.warn('[chatbase override] cannot access iframe document (probably cross-origin).', err);
+      // Fallback: try postMessage — embed might listen for such messages (depends on Chatbase impl).
+      try{
+        iframe.contentWindow.postMessage({ type: 'CHATBASE:INJECT_CSS', css: cssText }, '*');
+        console.log('[chatbase override] posted message to iframe (fallback).');
+      }catch(e){ /* ignore */ }
+      return false;
+    }
+  }
+
+  function findIframeAndInject(){
+    // iframe может находиться внутри #chatbase-bubble-window или вложен по-другому
+    const container = document.getElementById('chatbase-bubble-window');
+    if(container){
+      const ifr = container.querySelector('iframe');
+      if(ifr) return injectToIframe(ifr);
+    }
+    // еще пробуем найти любой iframe, который был добавлен скриптом Chatbase
+    const anyIframe = document.querySelector('iframe[src*="chatbase"]') || document.querySelector('iframe');
+    if(anyIframe) return injectToIframe(anyIframe);
+    return false;
+  }
+
+  // Попытки: при загрузке страницы и через сообщения "iframeReady"
+  window.addEventListener('message', (ev) => {
+    // если embed шлёт сообщение о готовности, попробуем инжект
+    try{
+      const data = ev.data;
+      if(typeof data === 'object' && (data === 'iframeReady' || data?.type === 'iframeReady' || data?.type === 'IFRAME_READY')){
+        setTimeout(findIframeAndInject, 300);
+      }
+      // В некоторых реализациях embed принимает {type:'INJECT_CSS'} — мы уже посылаем такое сообщение в catch
+    }catch(e){}
+  });
+
+  // Также запускаем через таймауты — на случай если iframe создаётся позже
+  setTimeout(findIframeAndInject, 1000);
+  setTimeout(findIframeAndInject, 3000);
+  setTimeout(findIframeAndInject, 7000);
+})();
+</script>
+</head>
+<body>
+  <div class="container">
+    <!-- === Хедер === -->
+    <header id="siteHeader">
+      <div class="brand">
+                <div class="logo">
+          
+          <!-- Лампа (түнгі режим) -->
+<div style="position:fixed;bottom:24px;left:24px;z-index:1200;">
+  <button id="themeLamp" class="theme-lamp" title="Түнгі/Күндізгі режим">
+    <img id="lampIcon" src="img/logo.png" alt="Theme" />
+  </button>
+</div>
+<script>
+(function(){
+  const body = document.body;
+  const lamp = document.getElementById('themeLamp');
+  const lampIcon = document.getElementById('lampIcon');
+  const footerLogo = document.getElementById('footerLogo');
+  const saved = localStorage.getItem('aqyl_theme');
+
+  // Функция для обновления логотипов
+  function updateLogos(isDark) {
+    lampIcon.src = isDark ? 'img/logo.png' : 'img/darklogo.png';
+    footerLogo.src = isDark ? 'img/logo.png' : 'img/darklogo.png';
+  }
+
+  // Настройка при загрузке
+  const isDarkStart = (saved === 'dark');
+  if (isDarkStart) body.classList.add('dark');
+  updateLogos(isDarkStart);
+
+  // Переключатель темы
+  lamp.addEventListener('click', () => {
+    body.classList.toggle('dark');
+    const isDark = body.classList.contains('dark');
+    localStorage.setItem('aqyl_theme', isDark ? 'dark' : 'light');
+    updateLogos(isDark);
+  });
+})();
+</script>
+
+  <script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const openModal = document.getElementById('open-modal');
+    const closeModal = document.getElementById('close-modal');
+    const modalBg = document.getElementById('modal-bg');
+
+    openModal.addEventListener('click', (e) => {
+      e.preventDefault();
+      modalBg.classList.add('show');
+      modalBg.setAttribute('aria-hidden', 'false');
+    });
+
+    closeModal.addEventListener('click', () => {
+      modalBg.classList.remove('show');
+      modalBg.setAttribute('aria-hidden', 'true');
+    });
+
+    modalBg.addEventListener('click', (e) => {
+      if (e.target === modalBg) {
+        modalBg.classList.remove('show');
+        modalBg.setAttribute('aria-hidden', 'true');
+      }
+    });
+  });
+  </script>
+        </div>
+        <h1>Aqyl.run</h1>
+      </div>
+      <nav>
+        <a href="course.html">Басты</a>
+        <a href="catalog.html">Курстар</a>
+        <a href="link.html">Байланыс</a>
+        <a class="pill" href="#" id="open-modal">Тіркелу</a>
+      </nav>
+      
+    </header>
+
+<main>
+  <p>Бұл құпиялық саясаты сіздің біздің сайтпен өзара әрекеттесу кезінде жинаған деректеріміздің қалай қолданылатынын түсіндіреді.</p>
+
+  <h2>1. Жиналатын ақпарат</h2>
+  <p>Біз сізден келесі ақпаратты жинай аламыз:</p>
+  <ul>
+    <li>Атыңыз, электрондық поштаңыз немесе байланыс ақпараттары;</li>
+    <li>Сайтқа кіру мәліметтері және cookie-файлдар;</li>
+    <li>Сайттағы әрекеттеріңіз және пайдаланушы тәжірибесі туралы деректер.</li>
+  </ul>
+
+  <h2>2. Ақпаратты пайдалану</h2>
+  <p>Жиналған ақпарат келесі мақсаттарда пайдаланылады:</p>
+  <ul>
+    <li>Сайт қызметтерін жақсарту;</li>
+    <li>Жеке ұсыныстар жасау;</li>
+    <li>Қауіпсіздікті қамтамасыз ету және заң талаптарын орындау.</li>
+  </ul>
+
+  <h2>3. Cookie-файлдар</h2>
+  <p>Біз cookie-файлдарды сайт жұмысын жақсарту және аналитикалық деректерді жинау үшін қолданамыз. Сіз браузер параметрлерінде cookie-ларды басқаруға немесе өшіруге болады.</p>
+
+  <h2>4. Ақпаратты қорғау</h2>
+  <p>Сіздің деректеріңізді қорғау үшін біз заманауи техникалық және ұйымдастырушылық шараларды қолданамыз. Дегенмен, интернет арқылы берілетін деректердің толық қауіпсіздігін ешкім кепілдік бере алмайды.</p>
+
+  <h2>5. Үшінші тарапқа ақпаратты беру</h2>
+  <p>Біз сіздің деректеріңізді үшінші тарапқа сатпаймыз немесе жалпыламаймыз. Тек заңды талаптарға сәйкес немесе қызмет көрсету мақсатында ғана ақпарат бөлісу мүмкін.</p>
+
+  <h2>6. Байланыс</h2>
+  <p>Құпиялық саясатына қатысты сұрақтар немесе ұсыныстар үшін бізге <a href="link.html">электрондық пошта арқылы хабарласыңыз</a>.</p>
+</main>
+
+
+
+
+    <!-- рег -->
+  <div class="modal-bg" id="modal-bg" aria-hidden="true">
+    <div class="modal">
+      <h3>Тіркелу</h3>
+      <input type="text" placeholder="Атыңыз">
+      <input type="email" placeholder="Email">
+      <input type="password" placeholder="Құпиясөз">
+      <button onclick="window.open('https://aqyl-register.kz','_blank')">Тіркелу</button>
+      <button class="close-btn" id="close-modal">Жабу</button>
+    </div>
+  </div>
+
+
+
+
+  <!--Футер-->
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<link rel="preconnect" href="https://fonts.gstatic.com">
+<link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Play&display=swap" rel="stylesheet"> 
+<footer class="">
+<div class="footer">
+<div class="row">
+<a href="#"><img class="footerLogo" id="footerLogo" src="img/logo.png" alt="Footer Logo" />
+  <p style="padding: center; font-size: 30px;">Aqyl.run</p></a>
+</div>
+
+<div class="row">
+<ul>
+<li><a href="course.html">Басты</a></li>
+<li><a href="catalog.html">Курстар</a></li>
+<li><p style="color: red;">Байланыс</p></li>
+</ul>
+</div>
+
+<div class="row">
+Aqyl.run Copyright © 2025  - All rights reserved by :  NET.runners 
+</div>
+</div>
+</footer>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  const body = document.body;
+  const lamp = document.getElementById('themeLamp');
+  const lampIcon = document.getElementById('lampIcon');
+  const footerLogo = document.getElementById('footerLogo');
+  const saved = localStorage.getItem('aqyl_theme');
+
+  // Функция обновления логотипов
+  function updateLogos(isDark) {
+    lampIcon.src = isDark ? 'img/logo.png' : 'img/darklogo.png';
+    footerLogo.src = isDark ? 'img/logo.png' : 'img/darklogo.png';
+  }
+
+  // Проверяем сохранённую тему
+  const isDarkStart = (saved === 'dark');
+  if (isDarkStart) body.classList.add('dark');
+  updateLogos(isDarkStart);
+
+  // Переключатель темы
+  lamp.addEventListener('click', () => {
+    body.classList.toggle('dark');
+    const isDark = body.classList.contains('dark');
+    localStorage.setItem('aqyl_theme', isDark ? 'dark' : 'light');
+    updateLogos(isDark);
+  });
+});
+</script>
+  <!-- NetRunner Chatbase -->
+<script>
+(function(){
+  if(!window.chatbase || window.chatbase("getState")!=="initialized"){
+    window.chatbase=(...arguments)=>{
+      if(!window.chatbase.q){window.chatbase.q=[]}
+      window.chatbase.q.push(arguments)
+    };
+    window.chatbase=new Proxy(window.chatbase,{
+      get(target,prop){
+        if(prop==="q"){return target.q}
+        return(...args)=>target(prop,...args)
+      }
+    })
+  }
+  const onLoad=function(){
+    const script=document.createElement("script");
+    script.src="https://www.chatbase.co/embed.min.js";
+    script.id="4R2oIwqP2YlECxoPg1DG5";  // 👈 это твой ID NetRunner
+    script.domain="www.chatbase.co";
+    document.body.appendChild(script)
+  };
+  if(document.readyState==="complete"){onLoad()}
+  else{window.addEventListener("load",onLoad)}
+})();
+</script>
+</body>
+</html>
+
+
+
+
